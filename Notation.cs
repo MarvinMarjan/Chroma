@@ -28,7 +28,7 @@ public static class Notation
 
 		// store the channels as numbers.
 		int[] rgbValues = (from channel in rgbChannels
-							where int.TryParse(channel, out int result)
+							where int.TryParse(channel, out _)
 							select int.Parse(channel)).ToArray();
 
 		bool result = rgbValues.Length == 3 && rgbValues.All(value => value >= 0 && value <= 255);

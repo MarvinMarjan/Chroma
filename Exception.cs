@@ -20,4 +20,8 @@ public class ChromaException : Exception
 	{
 		Target = target;
 	}
+
+
+	public override string ToString()
+		=> Message + (Target is HighlightTarget validTarget ? $" ({validTarget.From.Start}, {validTarget.To.End})" : "");
 }

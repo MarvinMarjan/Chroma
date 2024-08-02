@@ -62,13 +62,17 @@ public static class ColorTable
 	]);
 
 
+
+	public static bool ColorExists(string colorName)
+		=> s_colorTable.ContainsKey(colorName);
+
+
 	/// <summary>
 	/// Gets a color in the table.
 	/// </summary>
 	/// <param name="colorName"> The name of the color. </param>
 	/// <param name="layer"> The color layer. </param>
 	/// <returns> The searched color as a color element. </returns>
-	/// <exception cref="ChromaException"> Exception thrown if it was not possible to find the color. </exception>
 	public static ColorCodeElement GetColor(string colorName, ColorLayer layer)
 	{
 		string finalColorName = layer switch
@@ -79,12 +83,7 @@ public static class ColorTable
 			_ => ""
 		} + colorName;
 
-		bool found = s_colorTable.TryGetValue(finalColorName, out ColorCodeElement? element);
-	
-		if (!found)
-			throw new ChromaException(null, $"Invalid color name: {colorName}");
-
-		return element ?? Color16.Reset;
+		return s_colorTable[finalColorName];
 	}
 
 	/// <summary>
@@ -110,21 +109,17 @@ public static class ColorTable
 
 
 
+	public static bool ColorModeExists(string colorModeName)
+		=> s_colorModeTable.ContainsKey(colorModeName);
+
+
 	/// <summary>
 	/// Gets a color mode in the table.
 	/// </summary>
 	/// <param name="colorModeName"> The color mode name. </param>
 	/// <returns> The searched color mode. </returns>
-	/// <exception cref="ChromaException"> Exception thrown if it was not possible to find the color mode. </exception>
 	public static ColorMode GetMode(string colorModeName)
-	{
-		bool found = s_colorModeTable.TryGetValue(colorModeName, out ColorMode mode);
-	
-		if (!found)
-			throw new ChromaException(null, $"Invalid color mode name: {colorModeName}");
-
-		return mode;
-	}
+		=> s_colorModeTable[colorModeName];
 
 	/// <summary>
 	/// Same as "ColorTable.GetMode", but ignores exceptions.
