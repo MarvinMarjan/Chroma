@@ -5,18 +5,18 @@ namespace Specter.Color.Chroma;
 /// Represent Chroma structures.
 /// </summary>
 public interface IStructure
-{}
+{ }
 
 /// <summary>
 /// Represents a structure that can be converted to a notation representation.
 /// </summary>
 public interface INotationConvertableStructure : IStructure
 {
-	string ToNotation();
-	bool IsDefaultNotation() => ToNotation() == "_";
+    string ToNotation();
+    bool IsDefaultNotation() => ToNotation() == "_";
 
 
-	static INotationConvertableStructure DefaultNotation => new IdentifierStructure("_");
+    static INotationConvertableStructure DefaultNotation => new IdentifierStructure("_");
 }
 
 
@@ -25,10 +25,10 @@ public interface INotationConvertableStructure : IStructure
 /// </summary>
 public class IdentifierStructure(string source) : INotationConvertableStructure, IExpressionConvertable
 {
-	public string Source { get; set; } = source;
+    public string Source { get; set; } = source;
 
-	public string ToNotation() => Source;
-	public IExpression ToExpression() => new TextExpression(Source);
+    public string ToNotation() => Source;
+    public IExpression ToExpression() => new TextExpression(Source);
 }
 
 
@@ -37,13 +37,13 @@ public class IdentifierStructure(string source) : INotationConvertableStructure,
 /// </summary>
 public class RGBStructure(byte r, byte g, byte b) : INotationConvertableStructure
 {
-	public byte R { get; set; } = r;
-	public byte G { get; set; } = g;
-	public byte B { get; set; } = b;
+    public byte R { get; set; } = r;
+    public byte G { get; set; } = g;
+    public byte B { get; set; } = b;
 
 
-	public string ToNotation()
-		=> $"{R} {G} {B}";
+    public string ToNotation()
+        => $"{R} {G} {B}";
 }
 
 
@@ -51,42 +51,42 @@ public class RGBStructure(byte r, byte g, byte b) : INotationConvertableStructur
 /// Represents a format tag: "<green red underline>"
 /// </summary>
 public class FormatTagStructure(
-	INotationConvertableStructure? fg,
-	INotationConvertableStructure? bg,
-	INotationConvertableStructure? mode
+    INotationConvertableStructure? fg,
+    INotationConvertableStructure? bg,
+    INotationConvertableStructure? mode
 ) : IStructure, IExpressionConvertable
 {
-	public INotationConvertableStructure Foreground { get; set; } = fg ?? INotationConvertableStructure.DefaultNotation;
-	public INotationConvertableStructure Background { get; set; } = bg ?? INotationConvertableStructure.DefaultNotation;
-	public INotationConvertableStructure Mode { get; set; } = mode ?? INotationConvertableStructure.DefaultNotation;
+    public INotationConvertableStructure Foreground { get; set; } = fg ?? INotationConvertableStructure.DefaultNotation;
+    public INotationConvertableStructure Background { get; set; } = bg ?? INotationConvertableStructure.DefaultNotation;
+    public INotationConvertableStructure Mode { get; set; } = mode ?? INotationConvertableStructure.DefaultNotation;
 
-	public bool ResetTag { get; set; }
-
-
-	public FormatTagStructure() : this(null, null, null)
-	{
-		ResetTag = true;
-	}
+    public bool ResetTag { get; set; }
 
 
-	/// <summary>
-	/// Converts this tag to a ColorObject.
-	/// </summary>
-	public ColorObject ToColorObject()
-	{
-		if (ResetTag)
-			return ColorValue.Reset;
-
-		ColorObject color = ColorObject.None;
-
-		color.Foreground = Foreground.IsDefaultNotation() ? null : Notation.ToColorElement(Foreground, ColorLayer.Foreground);
-		color.Background = Background.IsDefaultNotation() ? null : Notation.ToColorElement(Background, ColorLayer.Background);
-		color.Mode       = Mode.IsDefaultNotation()       ? null : ColorTable.GetMode(Mode.ToNotation());
-
-		return color;
-	}
+    public FormatTagStructure() : this(null, null, null)
+    {
+        ResetTag = true;
+    }
 
 
-	public IExpression ToExpression()
-		=> new FormatExpression(ToColorObject());
+    /// <summary>
+    /// Converts this tag to a ColorObject.
+    /// </summary>
+    public ColorObject ToColorObject()
+    {
+        if (ResetTag)
+            return ColorValue.Reset;
+
+        ColorObject color = ColorObject.None;
+
+        color.Foreground = Foreground.IsDefaultNotation() ? null : Notation.ToColorElement(Foreground, ColorLayer.Foreground);
+        color.Background = Background.IsDefaultNotation() ? null : Notation.ToColorElement(Background, ColorLayer.Background);
+        color.Mode = Mode.IsDefaultNotation() ? null : ColorTable.GetMode(Mode.ToNotation());
+
+        return color;
+    }
+
+
+    public IExpression ToExpression()
+        => new FormatExpression(ToColorObject());
 }

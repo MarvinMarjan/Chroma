@@ -6,81 +6,81 @@ namespace Specter.Color.Chroma;
 
 public class Scanner
 {
-	private string _source = "";
-	private int _start, _end;
-	
-	private int Current
-	{
-		get => _end;
-		set => _end = value;
-	}
+    private string _source = "";
+    private int _start, _end;
 
-	private List<Token> _tokens = [];
+    private int Current
+    {
+        get => _end;
+        set => _end = value;
+    }
 
-
-	public List<Token> Scan(string source)
-	{
-		_source = source;
-		_start = _end = 0;
-
-		_tokens.Clear();
-
-		while (!AtEnd())
-		{
-			_start = _end;
-			ScanToken();
-		}
-
-		return _tokens;
-	}
+    private List<Token> _tokens = [];
 
 
-	private void ScanToken()
-	{
-		char ch = Advance();
+    public List<Token> Scan(string source)
+    {
+        _source = source;
+        _start = _end = 0;
 
-		switch (ch)
-		{
-			case '<': AddToken(TokenType.TagDelimeterLeft); break;
-			case '>': AddToken(TokenType.TagDelimeterRight); break;
-			case '(': AddToken(TokenType.LeftParen); break;
-			case ')': AddToken(TokenType.RightParen); break;
-			case '/': AddToken(TokenType.Slash); break;
-			case ',': AddToken(TokenType.Comma); break;
+        _tokens.Clear();
 
-			default:
-				if (!char.IsLetterOrDigit(ch))
-					AddToken(TokenType.Identifier);
-				else
-					Identifier();
-				
-				break;
-		}
-	}
+        while (!AtEnd())
+        {
+            _start = _end;
+            ScanToken();
+        }
+
+        return _tokens;
+    }
 
 
+    private void ScanToken()
+    {
+        char ch = Advance();
 
-	private void AddToken(TokenType type)
-		=> AddToken(_source[_start .. _end], type);
+        switch (ch)
+        {
+            case '<': AddToken(TokenType.TagDelimeterLeft); break;
+            case '>': AddToken(TokenType.TagDelimeterRight); break;
+            case '(': AddToken(TokenType.LeftParen); break;
+            case ')': AddToken(TokenType.RightParen); break;
+            case '/': AddToken(TokenType.Slash); break;
+            case ',': AddToken(TokenType.Comma); break;
 
-	private void AddToken(string lexeme, TokenType type)
-		=> _tokens.Add(new(lexeme, type, _start, _end));
+            default:
+                if (!char.IsLetterOrDigit(ch))
+                    AddToken(TokenType.Identifier);
+                else
+                    Identifier();
+
+                break;
+        }
+    }
 
 
-	
-	private void Identifier()
-	{
-		while (char.IsLetterOrDigit(Peek()))
-			Advance();
 
-		AddToken(TokenType.Identifier);
-	}
-	
+    private void AddToken(TokenType type)
+        => AddToken(_source[_start.._end], type);
+
+    private void AddToken(string lexeme, TokenType type)
+        => _tokens.Add(new(lexeme, type, _start, _end));
 
 
-	private char Advance() => _source[Current++];
 
-	private char Peek() => AtEnd() ? '\0' : _source[Current];
+    private void Identifier()
+    {
+        while (char.IsLetterOrDigit(Peek()))
+            Advance();
 
-	private bool AtEnd() => Current >= _source.Length;
+        AddToken(TokenType.Identifier);
+    }
+
+
+
+    private char Advance() => _source[Current++];
+
+    private char Peek() => AtEnd() ? '\0' : _source[Current];
+
+    private bool AtEnd() => Current >= _source.Length;
 }

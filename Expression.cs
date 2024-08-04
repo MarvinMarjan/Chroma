@@ -7,40 +7,40 @@ namespace Specter.Color.Chroma;
 
 public interface IExpression
 {
-	public string Stringify();
+    public string Stringify();
 }
 
 
 public interface IExpressionConvertable
 {
-	IExpression ToExpression();
+    IExpression ToExpression();
 }
 
 
 
 public class ExpressionConverter
 {
-	public static List<IExpression> ConvertAll(List<IExpressionConvertable> items)
-		=> (from item in items select item.ToExpression()).ToList();
+    public static List<IExpression> ConvertAll(List<IExpressionConvertable> items)
+        => (from item in items select item.ToExpression()).ToList();
 }
 
 
 
 public class FormatExpression(ColorObject color) : IExpression
 {
-	public ColorObject Color { get; set; } = color;
+    public ColorObject Color { get; set; } = color;
 
 
-	public string Stringify()
-		=> Color.AsSequence();
+    public string Stringify()
+        => Color.AsSequence();
 }
 
 
 public class TextExpression(string text) : IExpression
 {
-	public string Text { get; set; } = text;
+    public string Text { get; set; } = text;
 
 
-	public string Stringify()
-		=> Text;
+    public string Stringify()
+        => Text;
 }

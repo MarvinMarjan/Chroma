@@ -7,13 +7,13 @@ namespace Specter.Color.Chroma;
 
 public static class Formatter
 {
-	public static string Format(List<IExpression> expressions)
-	{
-		StringBuilder builder = new();
+    public static string Format(List<IExpression> expressions)
+    {
+        StringBuilder builder = new();
 
-		foreach (IExpression expression in expressions)
-			builder.Append(expression.Stringify());
+        foreach (IExpression expression in expressions)
+            builder.Append(expression.Stringify());
 
-		return builder.ToString();
-	}
+        return builder.ToString();
+    }
 }
