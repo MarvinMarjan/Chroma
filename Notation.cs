@@ -48,7 +48,7 @@ public static class Notation
     /// <param name="str"> The notation to convert. </param>
     /// <param name="layer"> The color layer. </param>
     /// <returns> A color element created from a notation. </returns>
-    public static IANSISequenceElement? ToColorElement(string str, ColorLayer layer = ColorLayer.Foreground)
+    public static SequenceElement? ToColorElement(string str, ColorLayer layer = ColorLayer.Foreground)
     {
         // 8-bit colors
         if (str.All(char.IsDigit))
@@ -72,6 +72,6 @@ public static class Notation
         return null;
     }
 
-    public static IANSISequenceElement? ToColorElement(INotationConvertableStructure structure, ColorLayer layer = ColorLayer.Foreground)
+    public static SequenceElement? ToColorElement(INotationConvertableStructure structure, ColorLayer layer = ColorLayer.Foreground)
         => ToColorElement(structure.ToNotation(), layer);
 }

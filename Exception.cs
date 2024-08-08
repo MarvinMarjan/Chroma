@@ -23,5 +23,5 @@ public class ChromaException : Exception
 
 
     public override string ToString()
-        => Message + (Target is HighlightTarget validTarget ? $" ({validTarget.From.Start}, {validTarget.To.End})" : "");
+        => Message + (Target is HighlightTarget validTarget ? $" (from index {validTarget.From.Start} to {validTarget.To.End})" : "");
 }
